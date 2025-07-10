@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Grafik pH</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h3 style="text-align:center;">Grafik pH</h3>
+  <canvas id="chart" width="400" height="200"></canvas>
+  <script>
+    function drawChart(dataString) {
+      const data = JSON.parse(dataString);
+      const ctx = document.getElementById('chart').getContext('2d');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: data.timestamps,
+          datasets: [{
+            label: 'pH',
+            data: data.pH,
+            borderColor: 'red',
+            backgroundColor: 'rgba(255,0,0,0.1)'
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            x: { title: { display: true, text: 'Waktu' }},
+            y: { title: { display: true, text: 'pH' }}
+          }
+        }
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      if (window.AppInventor) {
+        const raw = window.AppInventor.getWebViewString();
+        if (raw) drawChart(raw);
+      }
+    });
+  </script>
+</body>
+</html>
