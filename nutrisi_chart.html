@@ -6,40 +6,60 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <h3 style="text-align:center;">Grafik Nutrisi (PPM)</h3>
+  <h3 style="text-align:center;">Grafik PPM</h3>
   <canvas id="chart" width="400" height="200"></canvas>
+
   <script>
     function drawChart(dataString) {
-      const data = JSON.parse(dataString);
-      const ctx = document.getElementById('chart').getContext('2d');
-      new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: data.timestamps,
-          datasets: [{
-            label: 'PPM',
-            data: data.PPM,
-            borderColor: 'blue',
-            backgroundColor: 'rgba(0,0,255,0.1)'
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            x: { title: { display: true, text: 'Waktu' }},
-            y: { title: { display: true, text: 'PPM' }}
+      console.log("drawChart dipanggil dengan:", dataString);
+      try {
+        const data = JSON.parse(dataString);
+        const ctx = document.getElementById('chart').getContext('2d');
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: data.timestamps,
+            datasets: [{
+              label: 'PPM',
+              data: data.PPM,
+              borderColor: 'blue',
+              backgroundColor: 'rgba(0,0,255,0.1)',
+              fill: true
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              x: {
+                title: {
+                  display: true,
+                  text: 'Waktu'
+                }
+              },
+              y: {
+                title: {
+                  display: true,
+                  text: 'PPM'
+                }
+              }
+            }
           }
-        }
-      });
+        });
+      } catch (e) {
+        document.body.innerHTML += "<p style='color:red;'>Gagal memuat grafik: " + e + "</p>";
+        console.error("JSON parse error", e);
+      }
     }
 
     document.addEventListener("DOMContentLoaded", function () {
       if (window.AppInventor) {
         const raw = window.AppInventor.getWebViewString();
+        console.log("WebViewString:", raw);
         if (raw) drawChart(raw);
+      } else {
+        document.body.innerHTML += "<p style='color:red;'>AppInventor bridge tidak tersedia.</p>";
       }
     });
   </script>
 </body>
 </html>
-
