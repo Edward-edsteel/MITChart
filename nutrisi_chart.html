@@ -40,6 +40,52 @@
       }
     });
   </script>
+  <script>
+  function drawChart(dataString) {
+    console.log("Data masuk ke drawChart:");
+    console.log(dataString);
+
+    const data = JSON.parse(dataString);
+    const ctx = document.getElementById('chart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: data.timestamps,
+        datasets: [{
+          label: 'PPM',
+          data: data.PPM,
+          borderColor: 'blue',
+          backgroundColor: 'rgba(0,0,255,0.1)',
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: {
+            title: { display: true, text: 'Waktu' }
+          },
+          y: {
+            title: { display: true, text: 'PPM' }
+          }
+        }
+      }
+    });
+  }
+
+  // Tambahkan ini agar drawChart dipanggil otomatis dari WebViewString
+  document.addEventListener("DOMContentLoaded", function () {
+    if (window.AppInventor) {
+      const raw = window.AppInventor.getWebViewString();
+      console.log("WebViewString dari App Inventor:");
+      console.log(raw);
+      if (raw) drawChart(raw);
+    } else {
+      console.warn("AppInventor bridge tidak tersedia.");
+    }
+  });
+</script>
+
 </body>
 </html>
-<--Update-->
+
