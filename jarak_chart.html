@@ -36,7 +36,10 @@
     document.addEventListener("DOMContentLoaded", function () {
       if (window.AppInventor) {
         const raw = window.AppInventor.getWebViewString();
+        console.log("WebViewString:", raw);
         if (raw) drawChart(raw);
+      } else {
+        document.body.innerHTML += "<p style='color:red;'>AppInventor bridge tidak tersedia.</p>";
       }
     });
   </script>
